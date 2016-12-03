@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xzh.dao.MemberShipDao">
+
+	<resultMap type="MemberShip" id="MemberShipResult">
+		<association property="user" column="user_id_"
+			select="com.xzh.dao.UserDao.findById"></association>
+		<association property="group" column="group_id_"
+			select="com.xzh.dao.GroupDao.findById"></association>
+	</resultMap>
+
+	<select id="findById" parameterType="String" resultMap="MemberShipResult">
+		select *
+		from act_id_user where id_ = #{id}
+	</select>
+
+	<select id="login" parameterType="Map" resultMap="MemberShipResult">
+		SELECT
+		ms.USER_ID_ AS user_id_,
+		ms.GROUP_ID_ AS group_id_
+		FROM
+		ACT_ID_GROUP AS g,
+		ACT_ID_MEMBERSHIP AS ms,
+		ACT_ID_USER AS u
+		WHERE
+		u.ID_ = ms.USER_ID_ and g.ID_ = ms.GROUP_ID_
+		AND u.ID_ = #{userName} and u.PWD_ = #{password} and g.ID_ = #{groupId}
+	</select>
+
+</mapper> 
