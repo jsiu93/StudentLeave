@@ -72,7 +72,7 @@
 		if($('#tabs').tabs('exists', text)){
 			$('#tabs').tabs('select', text);
 		} else {
-			var content = "<iframe frameborder=0 scrolling='auto' style='width:100%; height=100%' src='${path}/page/"+url+"'></iframe>"
+			var content="<iframe frameborder=0 scrolling='auto' style='width:100%;height:100%' src='${pageContext.request.contextPath}/page/"+url+"'></iframe>";
 			$('#tabs').tabs('add', {
 				title : text, 
 				iconCls : iconCls,

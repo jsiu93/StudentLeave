@@ -15,5 +15,54 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="findById" parameterType="String" resultMap="UserResult">
 		select * from act_id_user where id_ = #{id}
 	</select>
+	
+	<select id="find" parameterType="Map" resultMap="UserResult">
+		select * from act_id_user 
+		<where>
+			<if test="id != null and id != ''">
+				and id_ like #{id}
+			</if>
+		</where>
+		<if test="start != null and size != null">
+			limit #{start}, #{size}
+		</if>
+	</select>
+	
+	
+	<select id="getTotal" parameterType="Map" resultType="Long">
+		select count(*) from act_id_user
+		<where>
+			<if test="id != null and id != ''">
+				and id_ like #{id}
+			</if>
+		</where>
+	</select>
+	
+	<insert id="add" parameterType="User">
+		insert into act_id_user values(#{id}, null, #{firstName}, #{lastName}, #{email}, #{password}, null)
+	</insert>
+	
+	<update id="update" parameterType="User">
+		update act_id_user
+		<set>
+			<if test="firstName != null and firstName != ''">
+				first_ = #{firstName},
+			</if>
+			<if test="lastName != null and lastName != ''">
+				last_ = #{lastName},
+			</if>
+			<if test="email != null and email != ''">
+				email_ = #{email},
+			</if>
+			<if test="password != null and password != ''">
+				pwd_ = #{password},
+			</if>
+		</set>
+		where id_ = #{id}
+	</update>
+	
+	<delete id="delete" parameterType="String" >
+		delete from act_id_user where id_ = #{id}
+	</delete>
 
 </mapper> 
