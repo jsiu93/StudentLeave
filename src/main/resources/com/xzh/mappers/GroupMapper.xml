@@ -20,5 +20,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select * from act_id_group
 		where id_ = #{id}
 	</select>
+	
+	<select id="getTotal" parameterType="Map" resultType="Long">
+		select count(*) from act_id_group
+	</select>
+	
+	<delete id="delete" parameterType="String">
+		delete from act_id_group where id_=#{id}
+	</delete>
+	
+	<insert id="add" parameterType="Group">
+		insert into act_id_group values(#{id},null,#{name},null);
+	</insert>
+	
+	<update id="update" parameterType="Group">
+		update act_id_group
+		<set>
+			<if test="name!=null and name!='' ">
+				name_=#{name},
+			</if>
+		</set>
+		where id_=#{id}
+	</update>
 
 </mapper> 

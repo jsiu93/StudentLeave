@@ -1,15 +1,19 @@
 package com.xzh.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.google.common.collect.Maps;
 import com.xzh.entity.Group;
 import com.xzh.service.GroupService;
+import com.xzh.util.PageBean;
 import com.xzh.util.ResponseUtil;
 
 import net.sf.json.JSONArray;
@@ -43,6 +47,64 @@ public class GroupController {
 		
 		ResponseUtil.write(response, jsonArray);
 		
+		return null;
+	}
+	
+	@RequestMapping("/list")
+	public String list(@RequestParam(value="page",required=false)String page,@RequestParam(value="rows",required=false)String rows,HttpServletResponse response)throws Exception{
+		PageBean pageBean=new PageBean(Integer.parseInt(page),Integer.parseInt(rows));
+		Map<String,Object> map = Maps.newHashMap();
+		map.put("start", pageBean.getStart());
+		map.put("size", pageBean.getPageSize());
+		List<Group> groupList=groupService.find(map);
+		Long total=groupService.getTotal(map);
+		JSONObject result=new JSONObject();
+		JSONArray jsonArray=JSONArray.fromObject(groupList);
+		result.put("rows", jsonArray);
+		result.put("total", total);
+		ResponseUtil.write(response, result);
+		return null;
+	}
+	
+	@RequestMapping("/delete")
+	public String delete(@RequestParam(value="ids",required=false)String ids,HttpServletResponse response)throws Exception{
+		String []idsStr=ids.split(",");
+		for(int i=0;i<idsStr.length;i++){
+			groupService.delete(idsStr[i]);
+		}
+		JSONObject result=new JSONObject();
+		result.put("success", true);
+		ResponseUtil.write(response, result);
+		return null;
+	}
+	
+	@RequestMapping("/save")
+	public String save(Group group,HttpServletResponse response,Integer flag)throws Exception{
+		int resultTotal=0;
+		if(flag==1){
+			resultTotal=groupService.add(group);
+		}else{
+			resultTotal=groupService.update(group);
+		}
+		JSONObject result=new JSONObject();
+		if(resultTotal>0){
+			result.put("success", true);
+		}else{
+			result.put("success", false);
+		}
+		ResponseUtil.write(response, result);
+		return null;
+	}
+	
+	@RequestMapping("/existGroupName")
+	public String existGroupName(String groupName,HttpServletResponse response)throws Exception{
+		JSONObject result=new JSONObject();
+		if(groupService.findById(groupName)==null){
+			result.put("exist", false);
+		}else{
+			result.put("exist", true);
+		}
+		ResponseUtil.write(response, result);
 		return null;
 	}
 }

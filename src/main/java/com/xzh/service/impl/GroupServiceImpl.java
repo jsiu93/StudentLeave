@@ -21,4 +21,24 @@ public class GroupServiceImpl implements GroupService{
 		return groupDao.find(map);
 	}
 
+	public Group findById(String id) {
+		return groupDao.findById(id);
+	}
+
+	public Long getTotal(Map<String, Object> map) {
+		return groupDao.getTotal(map);
+	}
+
+	public int delete(String id) {
+		return groupDao.delete(id);
+	}
+
+	public int update(Group group) {
+		return groupDao.update(group);
+	}
+
+	public int add(Group group) {
+		return groupDao.add(group);
+	}
+
 }
