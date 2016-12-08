@@ -11,8 +11,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.google.common.collect.Maps;
+import com.xzh.entity.Group;
 import com.xzh.entity.MemberShip;
 import com.xzh.entity.User;
+import com.xzh.service.GroupService;
 import com.xzh.service.MemberShipService;
 import com.xzh.service.UserService;
 import com.xzh.util.PageBean;
@@ -31,6 +33,9 @@ public class UserController {
 	
 	@Resource
 	private MemberShipService memberShipService;
+	
+	@Resource
+	private GroupService groupService;
 	
 	/**
 	 * 用户登录
@@ -149,6 +154,36 @@ public class UserController {
 		}
 		JSONObject result = new JSONObject();
 		result.put("success", true);
+		ResponseUtil.write(response, result);
+		return null;
+	}
+	
+	@RequestMapping("/listWithGroups")
+	public String listWithGroups(Integer page, Integer rows, User s_user, HttpServletResponse response) throws Exception{
+		PageBean pageBean = new PageBean(page, rows);
+		Map<String, Object> map = Maps.newHashMap();
+		map.put("id", StringUtil.formatLike(s_user.getId()));
+		map.put("start", pageBean.getStart());
+		map.put("size", pageBean.getPageSize());
+		List<User> userList = userService.find(map);
+		for (User user : userList) {
+			StringBuffer groups = new StringBuffer();
+			List<Group> groupList = groupService.findByUserId(user.getId());
+			for (Group group : groupList) {
+				groups.append(group.getName() + ",");
+			}
+			if(groups.length() > 0){
+				user.setGroups(groups.deleteCharAt(groups.length()-1).toString());
+			} else {
+				user.setGroups(groups.toString());
+			}
+		}
+		Long total = userService.getTotal(map);
+		JSONObject result = new JSONObject();
+		JSONArray jsonArray = JSONArray.fromObject(userList);
+		
+		result.put("rows", jsonArray);
+		result.put("total", total);
 		ResponseUtil.write(response, result);
 		return null;
 	}

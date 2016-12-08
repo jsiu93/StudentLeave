@@ -5,34 +5,38 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.xzh.dao.GroupDao">
 
 	<resultMap type="Group" id="GroupResult">
-		<result property="id" column="id_"/>	
-		<result property="name" column="name_"/>	
+		<result property="id" column="id_" />
+		<result property="name" column="name_" />
 	</resultMap>
-	
+
 	<select id="find" parameterType="Map" resultMap="GroupResult">
-		select * from act_id_group 
+		select * from act_id_group
 		<if test="start != null and size != null">
-		limit #{start}, #{size}
+			limit #{start}, #{size}
 		</if>
 	</select>
-	
+
 	<select id="findById" parameterType="String" resultMap="GroupResult">
-		select * from act_id_group
+		select *
+		from act_id_group
 		where id_ = #{id}
 	</select>
-	
+
 	<select id="getTotal" parameterType="Map" resultType="Long">
-		select count(*) from act_id_group
+		select
+		count(*) from act_id_group
 	</select>
-	
+
 	<delete id="delete" parameterType="String">
-		delete from act_id_group where id_=#{id}
+		delete from act_id_group where
+		id_=#{id}
 	</delete>
-	
+
 	<insert id="add" parameterType="Group">
-		insert into act_id_group values(#{id},null,#{name},null);
+		insert into act_id_group
+		values(#{id},null,#{name},null);
 	</insert>
-	
+
 	<update id="update" parameterType="Group">
 		update act_id_group
 		<set>
@@ -42,5 +46,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</set>
 		where id_=#{id}
 	</update>
+
+	<select id="findByUserId" parameterType="String" resultMap="GroupResult">
+		SELECT
+		g.ID_ AS id ,
+		g.NAME_ AS NAME
+		FROM
+		act_id_group g
+		LEFT JOIN act_id_membership m ON m.GROUP_ID_ = g.ID_
+		LEFT JOIN act_id_user u ON u.ID_ = m.USER_ID_
+		WHERE
+		u.ID_ = #{userId}
+	</select>
 
 </mapper> 

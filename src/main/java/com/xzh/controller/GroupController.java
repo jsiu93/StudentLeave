@@ -107,4 +107,39 @@ public class GroupController {
 		ResponseUtil.write(response, result);
 		return null;
 	}
+	
+	@RequestMapping("/listAllGroups")
+	public String listAllGroups(HttpServletResponse response) throws Exception{
+		List<Group> groupList = groupService.find(null);
+		JSONObject result = new JSONObject();
+		JSONArray jsonArray = JSONArray.fromObject(groupList);
+		result.put("groupList", jsonArray);
+		ResponseUtil.write(response, result);
+		return null;
+	}
+	
+	/**
+	 * 通过用户id查询角色集合，多个角色逗号隔开
+	 * @param userId
+	 * @param response
+	 * @return
+	 * @throws Exception 
+	 */
+	@RequestMapping("/findGroupByUserId")
+	public String findGroupByUserId(String userId, HttpServletResponse response) throws Exception{
+		List<Group> groupList = groupService.findByUserId(userId);
+		StringBuffer groups = new StringBuffer();
+		for (Group group : groupList) {
+			groups.append(group.getId() + ",");
+		}
+		JSONObject result = new JSONObject();
+		if(groups.length() > 0){
+			result.put("groups", groups.deleteCharAt(groups.length()-1).toString());
+		} else {
+			result.put("groups", groups.toString());
+		}
+		ResponseUtil.write(response, result);
+		return null;
+	}
+	
 }

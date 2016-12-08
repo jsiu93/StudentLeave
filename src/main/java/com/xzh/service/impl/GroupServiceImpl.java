@@ -41,4 +41,8 @@ public class GroupServiceImpl implements GroupService{
 		return groupDao.add(group);
 	}
 
+	public List<Group> findByUserId(String userId) {
+		return groupDao.findByUserId(userId);
+	}
+
 }

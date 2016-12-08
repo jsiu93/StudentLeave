@@ -28,5 +28,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		u.ID_ = ms.USER_ID_ and g.ID_ = ms.GROUP_ID_
 		AND u.ID_ = #{userName} and u.PWD_ = #{password} and g.ID_ = #{groupId}
 	</select>
+	
+	<delete id="deleteAllGroupsByUserId" parameterType="String">
+		delete from act_id_membership where user_id_ = #{userId}
+	</delete>
+	
+	<insert id="add" parameterType="MemberShip">
+		insert into act_id_membership values (#{user.id}, #{group.id})
+	</insert>
 
 </mapper> 

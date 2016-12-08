@@ -16,6 +16,8 @@ public class User {
 	private String email;
 	
 	private String password;
+	
+	private String groups;	//用户角色，多个角色之间用逗号隔开
 
 	public String getId() {
 		return id;
@@ -55,6 +57,14 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getGroups() {
+		return groups;
+	}
+
+	public void setGroups(String groups) {
+		this.groups = groups;
 	}
 	
 	

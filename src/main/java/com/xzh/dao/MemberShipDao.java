@@ -18,4 +18,13 @@ public interface MemberShipDao {
 	 */
 	public MemberShip login(Map<String, Object> map);
 	
+	/**
+	 * 删除指定用户所有角色
+	 * @param userId
+	 * @return
+	 */
+	int deleteAllGroupsByUserId(String userId);
+	
+	int add(MemberShip memberShip);
+	
 }

@@ -20,4 +20,12 @@ public class MemberShipServiceImpl implements MemberShipService{
 		return memberShipDao.login(map);
 	}
 
+	public int deleteAllGroupsByUserId(String userId) {
+		return memberShipDao.deleteAllGroupsByUserId(userId);
+	}
+
+	public int add(MemberShip memberShip) {
+		return memberShipDao.add(memberShip);
+	}
+
 }

@@ -18,4 +18,12 @@ public interface GroupService {
 	public int update(Group group);
 
 	public int add(Group group);
+
+	/**
+	 * 通过用户id查询角色集合
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	List<Group> findByUserId(String userId);
 }
